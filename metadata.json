@@ -1,0 +1,25 @@
+{
+  "author": "",
+  "checksums": {
+    "files/zookeeper-3.3.6.tar.gz": "68157fc9bc80a3bc78bb440191e3b32e",
+    "Rakefile": "f37e6131fe7de9a49b09d31596f5fbf1",
+    "manifests/params.pp": "cd15da005d3225820f5e793834f7f2c8",
+    "spec/fixtures/manifests/site.pp": "d41d8cd98f00b204e9800998ecf8427e",
+    "manifests/init.pp": "ff4617c5acae2f65008419aafe3c59c9",
+    "Modulefile": "7a21e4e1fe09faa71b07625dcd5de65f",
+    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "tests/init.pp": "b589cfd4938e1efa0ddb231181ab2bcb",
+    "templates/zoo.cfg.erb": "dc4b473203f4b34a80ed5e686a47f618",
+    "spec/spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
+    "README.markdown": "09e5115c69f8f8e2a24d5d434e6117f3"
+  },
+  "dependencies": [],
+  "description": "Puppet module to install zookeeper",
+  "license": "",
+  "name": "jjansen23-zookeeper",
+  "project_page": "",
+  "source": "",
+  "summary": "",
+  "types": [],
+  "version": "0.1.0"
+}
