@@ -50,7 +50,7 @@ class zookeeper {
     owner => "${zookeeper::params::user}",
     group => "${zookeeper::params::group}",
     mode => '644',
-    alias => 'zoo.cfgl',
+    alias => 'zoo.cfg',
     content => template('zookeeper/zoo.cfg.erb'),
   }  
 
