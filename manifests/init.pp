@@ -13,9 +13,6 @@
 class zookeeper {
   require zookeeper::params
 
-  $my_message = "zookeeper will be install"
-  notify {$my_message:}
-  
    file { "/usr/local/zookeeper-${zookeeper::params::version}.tar.gz":
     ensure => present,
      mode    => '640',
@@ -54,6 +51,14 @@ class zookeeper {
     content => template('zookeeper/zoo.cfg.erb'),
   }  
 
+   file { "${zookeeper::params::zookeeper_base}/bin/zkServer.sh":
+    owner => "${zookeeper::params::user}",
+    group => "${zookeeper::params::group}",
+    mode => '644',
+    alias => 'zkServer.sh',
+    content => template('zookeeper/zkServer.sh.erb'),
+  }  
+
    file { "/tmp/zookeeper":
      ensure => directory,
     owner => "${zookeeper::params::user}",
@@ -63,22 +68,22 @@ class zookeeper {
 
    file { "/etc/init.d/zookeeper":
      ensure => link,
-     target => '/opt/zookeeper/bin/zkServer.sh',
+     target => "${zookeeper::params::zookeeper_base}/bin/zkServer.sh",
     owner => "${zookeeper::params::user}",
     group => "${zookeeper::params::group}",
     mode => '644',
   }  
 
-   #   exec {"add-zookeeper-service":
-   #   command => '/sbin/chkconfig --add zookeeper',
-   #   refreshonly => false,      
-   #    require => File["/etc/init.d/zookeeper"],       
-   #    }
+    exec {"add-zookeeper-service":
+    command => '/sbin/chkconfig --add zookeeper',
+     refreshonly => false,      
+      require => File['/etc/init.d/zookeeper'],       
+      }
 
-  #  service {'zookeeper':
-   #  ensure => running,
-   # enable => true,
-   # hasstatus => true,
-   # hasrestart => true,
-   #}    
+    service {'zookeeper':
+    #ensure => running,
+    enable => true,
+    hasstatus => true,
+    hasrestart => true,
+    }    
 }

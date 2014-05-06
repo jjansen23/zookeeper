@@ -49,6 +49,13 @@ end
       	:alias                 => "zoo.cfg"
 		) }
 		
+  it { should create_file('/opt/zookeeper/bin/zkServer.sh').with(
+      	:owner              => "hduser",
+    	:group              => "hadoop",
+      	:mode              => "644",
+      	:alias                 => "zkServer.sh"
+		) }
+				
  it { should create_file('/tmp/zookeeper').with(
         :ensure             => 'directory',
       	:owner              => "hduser",
@@ -63,5 +70,17 @@ it { should create_file('/etc/init.d/zookeeper').with(
     	:group              => "hadoop",
       	:mode              => "644",
 		) }		    
+
+  it { should contain_exec('add-zookeeper-service').with(
+            'command'    => '/sbin/chkconfig --add zookeeper',
+            'refreshonly'  => 'false',
+            'require'        => 'File[/etc/init.d/zookeeper]'
+        ) }
+		  
+ it { should contain_service('zookeeper').with(
+        :enable             => 'true',
+        :hasstatus         => 'true',
+        :hasrestart        => 'true',
+        ) }		  
 		       
 end
