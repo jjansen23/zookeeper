@@ -78,7 +78,6 @@ it { should create_file('/etc/init.d/zookeeper').with(
         ) }
 		  
  it { should contain_service('zookeeper').with(
-        :enable             => 'true',
         :hasstatus         => 'true',
         :hasrestart        => 'true',
         ) }		  

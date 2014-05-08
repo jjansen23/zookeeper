@@ -43,28 +43,32 @@ class zookeeper {
        require => Exec[rename_zookeeper],       
        }
   
-   file { "${zookeeper::params::zookeeper_base}/conf/zoo.cfg":
+
+   file { "${zookeeper::params::zookeeper_base}/conf/zkEnv.sh":
     owner => "${zookeeper::params::user}",
     group => "${zookeeper::params::group}",
     mode => '644',
-    alias => 'zoo.cfg',
-    content => template('zookeeper/zoo.cfg.erb'),
+    alias => 'zkEnv.sh',
+    content => template('zookeeper/zkEnv.sh.erb'),
   }  
 
-   file { "${zookeeper::params::zookeeper_base}/bin/zkServer.sh":
+   file { "${zookeeper::params::zookeeper_base}/conf/zookeeper_log.cron":
+    owner => "${zookeeper::params::user}",
+    group => "${zookeeper::params::group}",
+    mode => '644',
+    alias => 'zookeeper_log.cron',
+    content => template('zookeeper/zookeeper_log.cron.erb'),
+   }
+  
+  file { "${zookeeper::params::zookeeper_base}/bin/zkServer.sh":
+    ensure   => file,
+    path      => "${zookeeper::params::zookeeper_base}/bin/zkServer.sh",
     owner => "${zookeeper::params::user}",
     group => "${zookeeper::params::group}",
     mode => '644',
     alias => 'zkServer.sh',
     content => template('zookeeper/zkServer.sh.erb'),
-  }  
-
-   file { "/tmp/zookeeper":
-     ensure => directory,
-    owner => "${zookeeper::params::user}",
-    group => "${zookeeper::params::group}",
-    mode => '644',
-  }  
+  }
 
    file { "/etc/init.d/zookeeper":
      ensure => link,
@@ -72,18 +76,35 @@ class zookeeper {
     owner => "${zookeeper::params::user}",
     group => "${zookeeper::params::group}",
     mode => '644',
+   require => File["${zookeeper::params::zookeeper_base}/bin/zkServer.sh"] 
   }  
-
+  
+   file { "${zookeeper::params::zookeeper_base}/conf/zoo.cfg":
+    owner => "${zookeeper::params::user}",
+    group => "${zookeeper::params::group}",
+    mode => '644',
+    alias => 'zoo.cfg',
+    content => template('zookeeper/zoo.cfg.erb'),
+   require => File["${zookeeper::params::zookeeper_base}/bin/zkServer.sh"] 
+  }    
+  
+   file { "/tmp/zookeeper":
+     ensure => directory,
+    owner => "${zookeeper::params::user}",
+    group => "${zookeeper::params::group}",
+    mode => '644',
+  }  
+ 
     exec {"add-zookeeper-service":
     command => '/sbin/chkconfig --add zookeeper',
      refreshonly => false,      
-      require => File['/etc/init.d/zookeeper'],       
+     require => File['/etc/init.d/zookeeper'],       
       }
 
     service {'zookeeper':
     #ensure => running,
-    enable => true,
+   # enable => true,
     hasstatus => true,
     hasrestart => true,
-    }    
+   }    
 }
