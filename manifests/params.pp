@@ -14,5 +14,16 @@ class zookeeper::params{
   $install_dir    = $::zookeeper_install ? {
     default => "/opt",
    }
-   
+ $zookeeper_server    = $::zookeeper_server ? {
+    default => "zookeeper_server",
+   }   
+  $zookeeper_server_1    = $::zookeeper_server_1 ? {
+    default => "puppet-agent.localdomain",
+   }
+  $zookeeper_server_2    = $::zookeeper_server_2 ? {
+    default => "zookeeper_server_2",
+   }
+  $zookeeper_server_3    = $::zookeeper_server_3 ? {
+    default => "zookeeper_server_3",
+   }      
 }

@@ -94,7 +94,61 @@ class zookeeper {
     group => "${zookeeper::params::group}",
     mode => '644',
   }  
- 
+
+   file { "/data":
+     ensure => directory,
+     owner => "${zookeeper::params::user}",
+     group => "${zookeeper::params::group}",
+     mode => '644',
+  }
+  
+    file { "/data/0/":
+     ensure => directory,
+    owner => "${zookeeper::params::user}",
+    group => "${zookeeper::params::group}",
+    mode => '644',
+    require => File["/data"]
+  }
+  
+  if $fqdn == "$zookeeper_server_1" 
+    {
+      file { "/data/0/myid":
+      ensure => file,
+      backup => false,
+      content => "0",
+      owner => "${zookeeper::params::user}",
+      group => "${zookeeper::params::group}",
+      mode => '644',
+      require => File["/data/0/"]
+      }  
+    }
+    
+    if $fqdn == "$zookeeper_server_2" 
+    {
+      file { "/data/0/myid":
+      ensure => file,
+      backup => false,
+      content => "1",
+      owner => "${zookeeper::params::user}",
+      group => "${zookeeper::params::group}",
+      mode => '644',
+      require => File["/data/0/"]
+      }  
+    }
+    
+    if $fqdn == "$zookeeper_server_3" 
+    {
+      file { "/data/0/myid":
+      ensure => file,
+      backup => false,
+      content => "2",
+      owner => "${zookeeper::params::user}",
+      group => "${zookeeper::params::group}",
+      mode => '644',
+      require => File["/data/0/"]
+      }  
+    }
+    
     exec {"add-zookeeper-service":
     command => '/sbin/chkconfig --add zookeeper',
      refreshonly => false,      
